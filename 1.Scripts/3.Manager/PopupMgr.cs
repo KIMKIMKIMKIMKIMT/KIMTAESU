@@ -14,10 +14,6 @@ public class PopupMgr : DontDestroy<PopupMgr>
     [SerializeField] private OkCancelPopup _okCancelPopup;
     public bool _bPossibleClickBackBtn;
 
-    public int popupsCount
-    {
-        get { return _popups.Count; }
-    }
 
     public bool IsStackClean
     {
@@ -61,7 +57,7 @@ public class PopupMgr : DontDestroy<PopupMgr>
 #if UNITY_EDITOR
                             EditorApplication.isPlaying = false;
 #else
-                            Application.Quit();       
+                            Application.Quit();
 #endif
                         });
                     }
@@ -74,8 +70,8 @@ public class PopupMgr : DontDestroy<PopupMgr>
         }
     }
 
-    
-#endregion
+
+    #endregion
 
     #region Public Methods
     public void AddPopup(GameObject popup)
@@ -107,7 +103,7 @@ public class PopupMgr : DontDestroy<PopupMgr>
     }
 
     public void ShowOkCancelPopup(string title, string body, OkCancelPopup.OkDel del = null)
-    { 
+    {
         AddPopup(_okCancelPopup.gameObject);
         _okCancelPopup.SetUI(title, body, del);
     }
