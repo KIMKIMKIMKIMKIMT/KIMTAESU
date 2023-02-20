@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 
 public class IAPMgr : DontDestroy<IAPMgr>, IStoreListener
 {
+    #region Fields
     static IStoreController storeController = null;
 
     private string STORENAME
@@ -21,19 +22,22 @@ public class IAPMgr : DontDestroy<IAPMgr>, IStoreListener
     }
 
     private string[] _productlds;
+    #endregion
 
-
+    #region Unity Methods
     private void Start()
     {
         if (storeController == null)
         {
-            _productlds = new string[] { "gem_100", "gem_500", "gem_1000", "gem_5000"};
+            _productlds = new string[] { "gem_100", "gem_500", "gem_1000", "gem_5000" };
 
             InitStore();
         }
     }
+    #endregion
 
-    void InitStore()
+    #region Public Methods
+    public void InitStore()
     {
         ConfigurationBuilder builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 
@@ -43,17 +47,6 @@ public class IAPMgr : DontDestroy<IAPMgr>, IStoreListener
         builder.AddProduct(_productlds[3], ProductType.Consumable, new IDs { { _productlds[3], STORENAME } });
         UnityPurchasing.Initialize(this, builder);
     }
-
-    void IStoreListener.OnInitialized(IStoreController controller, IExtensionProvider extensions)
-    {
-        storeController = controller;
-    }
-
-    void IStoreListener.OnInitializeFailed(InitializationFailureReason error)
-    {
-        Debug.Log("OnlnitializeFailed : " + error);
-    }
-
     public void Purchase(int index)
     {
         if (storeController == null)
@@ -90,6 +83,46 @@ public class IAPMgr : DontDestroy<IAPMgr>, IStoreListener
 
         }
     }
+    public void GiveReward(string productId)
+    {
+        switch (productId)
+        {
+            case "gem_100":
+                PlayerDataMgr.Instance.PlayerData.Gem += 100;
+                PlayerDataMgr.Instance.SaveData();
+                UIMgr.Instance.Refresh();
+                break;
+            case "gem_500":
+                PlayerDataMgr.Instance.PlayerData.Gem += 500;
+                PlayerDataMgr.Instance.SaveData();
+                UIMgr.Instance.Refresh();
+                break;
+            case "gem_1000":
+                PlayerDataMgr.Instance.PlayerData.Gem += 1000;
+                PlayerDataMgr.Instance.SaveData();
+                UIMgr.Instance.Refresh();
+                break;
+            case "gem_5000":
+                PlayerDataMgr.Instance.PlayerData.Gem += 5000;
+                PlayerDataMgr.Instance.SaveData();
+                UIMgr.Instance.Refresh();
+                break;
+        }
+    }
+    #endregion
+
+    #region IAPInterface
+    void IStoreListener.OnInitialized(IStoreController controller, IExtensionProvider extensions)
+    {
+        storeController = controller;
+    }
+
+    void IStoreListener.OnInitializeFailed(InitializationFailureReason error)
+    {
+        Debug.Log("OnlnitializeFailed : " + error);
+    }
+
+
     PurchaseProcessingResult IStoreListener.ProcessPurchase(PurchaseEventArgs e)
     {
         bool validPurchase = true;
@@ -119,31 +152,6 @@ public class IAPMgr : DontDestroy<IAPMgr>, IStoreListener
             Debug.Log("구매 실패 : " + p);
         }
     }
+    #endregion
 
-    public void GiveReward(string productId)
-    {
-        switch (productId)
-        {
-            case "gem_100":
-                PlayerDataMgr.Instance.PlayerData.Gem += 100;
-                PlayerDataMgr.Instance.SaveData();
-                UIMgr.Instance.Refresh();
-                break;
-            case "gem_500":
-                PlayerDataMgr.Instance.PlayerData.Gem += 500;
-                PlayerDataMgr.Instance.SaveData();
-                UIMgr.Instance.Refresh();
-                break;
-            case "gem_1000":
-                PlayerDataMgr.Instance.PlayerData.Gem += 1000;
-                PlayerDataMgr.Instance.SaveData();
-                UIMgr.Instance.Refresh();
-                break;
-            case "gem_5000":
-                PlayerDataMgr.Instance.PlayerData.Gem += 5000;
-                PlayerDataMgr.Instance.SaveData();
-                UIMgr.Instance.Refresh();
-                break;
-        }
-    }
 }
