@@ -12,7 +12,6 @@ public class IAPMgr : DontDestroy<IAPMgr>, IStoreListener
 {
     static IStoreController storeController = null;
 
-    public bool isPurchaseUnderProcess = true;
     private string STORENAME
     {
         get
@@ -119,11 +118,6 @@ public class IAPMgr : DontDestroy<IAPMgr>, IStoreListener
         {
             Debug.Log("구매 실패 : " + p);
         }
-    }
-
-    public void Pending()
-    {
-        isPurchaseUnderProcess = !isPurchaseUnderProcess;
     }
 
     public void GiveReward(string productId)
